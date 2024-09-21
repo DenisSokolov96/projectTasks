@@ -18,7 +18,6 @@
 n = int(input())
 price = {1: [1, 15], 2: [5, 70], 3: [10, 125], 4: [20, 230], 5: [60, 440]}
 res = [0, 0, 0, 0, 0]
-dict_all_tickets = {}
 
 
 def get_sum(mas_sum):
@@ -34,32 +33,24 @@ def run():
         res[i - 1] = new_n // price.get(i)[0]
         new_n = new_n % price[i][0]
 
-    dict_all_tickets[get_sum(res)] = res
-    temp_res = []
-    for x in res:
-        temp_res.append(x)
+    sum_res = get_sum(res)
+    temp_res = [x for x in res]
 
     for i in range(1, 5, 1):
         temp_res[i - 1] = 0
         temp_res[i] = temp_res[i] + 1
-        mas_write = []
+        mas_write = [x for x in temp_res]
 
-        for x in temp_res:
-            mas_write.append(x)
         ticket_price = get_sum(mas_write)
 
-        if ticket_price not in dict_all_tickets:
-            dict_all_tickets[ticket_price] = mas_write
+        if (ticket_price > sum_res) or (ticket_price == sum_res and sum(mas_write) > sum(res)):
             continue
 
-        count_ticket = sum(mas_write)
-        if count_ticket < sum(dict_all_tickets.get(ticket_price)):
-            dict_all_tickets[count_ticket] = mas_write
+        sum_res = ticket_price
+        for i in range(len(mas_write)):
+            res[i] = mas_write[i]
 
 
 run()
 
-minKey = min(dict_all_tickets.keys())
-if minKey > 0:
-    mas = dict_all_tickets.get(minKey)
-    print(*mas, sep=' ')
+print(*res, sep=' ')
